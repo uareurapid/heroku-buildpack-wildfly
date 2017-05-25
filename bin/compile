@@ -39,6 +39,18 @@ echo "done JBOSS_HOME --> $JBOSS_HOME"
 OUTPUT="$(ls -al)"
 echo "${OUTPUT}"
 
+echo "-----> Creating configuration..."
+if [ -f $BUILD_DIR/Procfile ]; then
+  echo "        - Using existing process types"
+else
+  cat << EOF > $BUILD_DIR/Procfile
+web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
+EOF
+fi
+
+#------------ now install the driver ---------
+
+
 echo "---------------------------------"
 echo "downloading postgresql driver..."
 curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
@@ -65,18 +77,11 @@ echo "done"
 #clean temp dir
 rm -rf $TMP_POSTGRESQL_DIR
 
+#---------------------------------------------
+
 echo -n "-----> Deploying war file(s)... "
 cp target/*.war $JBOSS_HOME/standalone/deployments/
 echo "done"
-
-echo "-----> Creating configuration..."
-if [ -f $BUILD_DIR/Procfile ]; then
-  echo "        - Using existing process types"
-else
-  cat << EOF > $BUILD_DIR/Procfile
-web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
-EOF
-fi
 
 cat << EOF > $BUILD_DIR/.profile.d/jboss.sh
 export JBOSS_HOME=${JBOSS_HOME}
