@@ -68,7 +68,7 @@ mv postgresql-42.1.1.jar $JBOSS_HOME/standalone/deployments/
 #clean temp dir
 #rm -rf $TMP_POSTGRESQL_DIR
 
-OUTPUT_DEPLOYMENTS="$(ls -al $JBOSS_HOME/standalone/deployments/)"
+OUTPUT_DEPLOYMENTS="$(cat $JBOSS_HOME/modules/org/postgres/main/module.xml)"
 #---------------------------------------------
 echo "display content of deployments directory:"
 echo "${OUTPUT_DEPLOYMENTS}"
