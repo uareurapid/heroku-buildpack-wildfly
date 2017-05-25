@@ -40,12 +40,23 @@ OUTPUT="$(ls -al)"
 echo "${OUTPUT}"
 
 echo "---------------------------------"
-echo "installing postgresql driver..."
+echo "downloading postgresql driver..."
 curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
 
+TMP_POSTGRESQL_DIR="tmp_drivers"
+mkdir -p $TMP_POSTGRESQL_DIR
+
+echo "copying driver to temporary working dir $TMP_POSTGRESQL_DIR"
+mv postgresql-42.1.1.jar $TMP_POSTGRESQL_DIR
 #install postgres driver wildfly
 
-#$JBOSS_HOME/bin/
+JBOSS_CLI_FILE="./install_postgresql_module.cli"
+echo "installing the postgresql as a wildfly module"
+$JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_CLI_FILE
+echo "done"
+
+#clean temp dir
+rm -rf $TMP_POSTGRESQL_DIR
 
 echo -n "-----> Deploying war file(s)... "
 cp target/*.war $JBOSS_HOME/standalone/deployments/
