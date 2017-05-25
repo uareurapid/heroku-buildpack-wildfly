@@ -20,8 +20,8 @@ curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-c
 
 install_java_with_overlay ${BUILD_DIR}
 
-WILDFLY_VERSION="10.0.0.Final"
-WILDFLY_SHA1="c0dd7552c5207b0d116a9c25eb94d10b4f375549"
+WILDFLY_VERSION="10.1.0.Final"
+WILDFLY_SHA1="9ee3c0255e2e6007d502223916cefad2a1a5e333"
 JBOSS_HOME=".jboss/wildfly-${WILDFLY_VERSION}"
 
 cd $BUILD_DIR
@@ -35,6 +35,13 @@ tar xf wildfly-$WILDFLY_VERSION.tar.gz
 mv wildfly-$WILDFLY_VERSION $JBOSS_HOME
 rm wildfly-$WILDFLY_VERSION.tar.gz
 echo "done"
+
+echo "installing postgresql driver..."
+curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
+
+#install postgres driver wildfly
+
+#$JBOSS_HOME/bin/
 
 echo -n "-----> Deploying war file(s)... "
 cp target/*.war $JBOSS_HOME/standalone/deployments/
