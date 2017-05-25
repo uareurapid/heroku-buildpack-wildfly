@@ -34,8 +34,12 @@ sha1sum wildfly-$WILDFLY_VERSION.tar.gz | grep $WILDFLY_SHA1 > /dev/null 2>&1
 tar xf wildfly-$WILDFLY_VERSION.tar.gz
 mv wildfly-$WILDFLY_VERSION $JBOSS_HOME
 rm wildfly-$WILDFLY_VERSION.tar.gz
-echo "done"
+echo "done JBOSS_HOME --> $JBOSS_HOME"
 
+OUTPUT="$(ls -al)"
+echo "${OUTPUT}"
+
+echo "---------------------------------"
 echo "installing postgresql driver..."
 curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
 
