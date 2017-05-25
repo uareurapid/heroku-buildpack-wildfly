@@ -64,7 +64,7 @@ mv postgresql-42.1.1.jar $TMP_POSTGRESQL_DIR
 
 JBOSS_CLI_FILE="./install_postgresql_module.cli"
 
-echo 'connect 127.0.0.1:9990
+echo 'connect 127.0.0.1:9999
 module add --name=org.postgres --resources=./tmp_drivers/postgresql-42.1.1.jar --dependencies=javax.api,javax.transaction.api
 /subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)' > $JBOSS_CLI_FILE
 
