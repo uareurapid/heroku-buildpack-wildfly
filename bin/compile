@@ -39,6 +39,42 @@ echo "done JBOSS_HOME --> $JBOSS_HOME"
 OUTPUT="$(ls -al)"
 echo "${OUTPUT}"
 
+
+echo "---------------------------------"
+echo "downloading postgresql driver..."
+curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
+
+#TMP_POSTGRESQL_DIR="tmp_drivers"
+#mkdir -p $TMP_POSTGRESQL_DIR
+
+#echo "copying driver to temporary working dir $TMP_POSTGRESQL_DIR"
+#------------ now install the driver ---------
+
+mv postgresql-42.1.1.jar $JBOSS_HOME/standalone/deployments/
+#install postgres driver wildfly
+
+#JBOSS_CLI_FILE="./install_postgresql_module.cli"
+
+#echo 'connect controler=http://127.0.0.1:9990
+#module add --name=org.postgres --resources=./tmp_drivers/postgresql-42.1.1.jar --dependencies=javax.api,javax.transaction.api
+#/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)' > $JBOSS_CLI_FILE
+
+#cat $JBOSS_CLI_FILE
+
+#echo "installing the postgresql as a wildfly module"
+#$JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_CLI_FILE
+#echo "done"
+
+#clean temp dir
+#rm -rf $TMP_POSTGRESQL_DIR
+
+#---------------------------------------------
+
+echo -n "-----> Deploying war file(s)... "
+cp target/*.war $JBOSS_HOME/standalone/deployments/
+echo "done"
+
+
 echo "-----> Creating configuration..."
 if [ -f $BUILD_DIR/Procfile ]; then
   echo "        - Using existing process types"
@@ -48,40 +84,10 @@ web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
 EOF
 fi
 
-#------------ now install the driver ---------
 
 
-echo "---------------------------------"
-echo "downloading postgresql driver..."
-curl --retry 3 -s -O https://jdbc.postgresql.org/download/postgresql-42.1.1.jar
 
-TMP_POSTGRESQL_DIR="tmp_drivers"
-mkdir -p $TMP_POSTGRESQL_DIR
 
-echo "copying driver to temporary working dir $TMP_POSTGRESQL_DIR"
-mv postgresql-42.1.1.jar $TMP_POSTGRESQL_DIR
-#install postgres driver wildfly
-
-JBOSS_CLI_FILE="./install_postgresql_module.cli"
-
-echo 'connect 127.0.0.1:9999
-module add --name=org.postgres --resources=./tmp_drivers/postgresql-42.1.1.jar --dependencies=javax.api,javax.transaction.api
-/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)' > $JBOSS_CLI_FILE
-
-cat $JBOSS_CLI_FILE
-
-echo "installing the postgresql as a wildfly module"
-$JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_CLI_FILE
-echo "done"
-
-#clean temp dir
-rm -rf $TMP_POSTGRESQL_DIR
-
-#---------------------------------------------
-
-echo -n "-----> Deploying war file(s)... "
-cp target/*.war $JBOSS_HOME/standalone/deployments/
-echo "done"
 
 cat << EOF > $BUILD_DIR/.profile.d/jboss.sh
 export JBOSS_HOME=${JBOSS_HOME}
