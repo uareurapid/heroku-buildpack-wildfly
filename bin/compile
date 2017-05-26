@@ -76,8 +76,8 @@ echo "stopping the server again for war deployment"
 $JBOSS_HOME/bin/jboss-cli.sh --connect command=:shutdown
 
 #use gmail to send emails
-echo "replacing standalone.xml email configuration..."
-./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml
+echo "replacing standalone.xml email configuration...$GMAIL_USERNAME $GMAIL_PASSWORD"
+./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml $GMAIL_USERNAME $GMAIL_PASSWORD
 
 
 echo -n "-----> Deploying war file(s)... "
