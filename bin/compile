@@ -59,7 +59,11 @@ echo "checking content of $JBOSS_CLI_FILE"
 cat $JBOSS_CLI_FILE
 
 echo "start server for module installation via console... on port 8080"
-$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=8080
+#send it to the background and own the shell, yahhh!!
+nohup $JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=8080 &
+
+#wait a little bit
+sleep 15s
 
 echo "installing the postgresql as a wildfly module"
 $JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_CLI_FILE
