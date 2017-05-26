@@ -75,11 +75,16 @@ rm -rf $TMP_POSTGRESQL_DIR
 echo "stopping the server again for war deployment"
 $JBOSS_HOME/bin/jboss-cli.sh --connect command=:shutdown
 
-echo $GMAIL_USERNAME
-#use gmail to send emails
-echo "replacing standalone.xml email configuration...$GMAIL_USERNAME $GMAIL_PASSWORD..."
-./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml $GMAIL_USERNAME $GMAIL_PASSWORD
 
+# If config var GMAIL_USERNAME and GMAIL_PASSWORD exists, take its content and replace them on the template
+if [[ -f "$ENV_DIR/GMAIL_USERNAME" ]] && [[ -f "$ENV_DIR/GMAIL_PASSWORD" ]]; then
+	#vars for sending emails
+	GMAIL_USERNAME=$(cat "$ENV_DIR/GMAIL_USERNAME")
+	GMAIL_PASSWORD=$(cat "$ENV_DIR/GMAIL_PASSWORD")
+	#use gmail to send emails
+	echo "replacing standalone.xml email configuration...$GMAIL_USERNAME $GMAIL_PASSWORD..."
+	./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml $GMAIL_USERNAME $GMAIL_PASSWORD
+fi
 
 echo -n "-----> Deploying war file(s)... "
 cp target/*.war $JBOSS_HOME/standalone/deployments/
