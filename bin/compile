@@ -58,8 +58,8 @@ JBOSS_CLI_FILE="./install_postgresql_module.cli"
 echo "checking content of $JBOSS_CLI_FILE"
 cat $JBOSS_CLI_FILE
 
-echo "start server for odule installation via console..."
-$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
+echo "start server for module installation via console... on port $PORT"
+$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=$PORT
 
 echo "installing the postgresql as a wildfly module"
 $JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_CLI_FILE
