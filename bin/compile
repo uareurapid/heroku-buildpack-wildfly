@@ -75,8 +75,9 @@ rm -rf $TMP_POSTGRESQL_DIR
 echo "stopping the server again for war deployment"
 $JBOSS_HOME/bin/jboss-cli.sh --connect command=:shutdown
 
+echo $GMAIL_USERNAME
 #use gmail to send emails
-echo "replacing standalone.xml email configuration...$GMAIL_USERNAME $GMAIL_PASSWORD"
+echo "replacing standalone.xml email configuration...$GMAIL_USERNAME $GMAIL_PASSWORD..."
 ./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml $GMAIL_USERNAME $GMAIL_PASSWORD
 
 
