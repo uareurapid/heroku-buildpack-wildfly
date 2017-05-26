@@ -75,8 +75,9 @@ rm -rf $TMP_POSTGRESQL_DIR
 echo "stopping the server again for war deployment"
 $JBOSS_HOME/bin/jboss-cli.sh --connect command=:shutdown
 
-#echo "replacing standalone.xml templates..."
-#cp ./standalone_template.xml $JBOSS_HOME/standalone/configuration/standalone.xml
+#use gmail to send emails
+echo "replacing standalone.xml email configuration..."
+./replace_email_config.sh $JBOSS_HOME/standalone/configuration/standalone.xml
 
 
 echo -n "-----> Deploying war file(s)... "
