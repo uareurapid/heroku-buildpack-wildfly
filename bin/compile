@@ -106,5 +106,6 @@ fi
 cat << EOF > $BUILD_DIR/.profile.d/jboss.sh
 export JBOSS_HOME=${JBOSS_HOME}
 #try manual start (was not working with the procfile)
-$JBOSS_HOME/bin/standalone.sh -Djboss.http.port=$PORT -b 0.0.0.0
+echo "try restart server manually"
+$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=8080
 EOF
