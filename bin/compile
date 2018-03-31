@@ -96,11 +96,10 @@ JBOSS_LOG_MANAGER_LIB="$(echo $JBOSS_HOME/modules/system/layers/base/org/jboss/l
 echo "-----> Creating configuration (or executing Procfile if exists)..."
 if [ -f $BUILD_DIR/Procfile ]; then
   echo "- Using existing process types"
-  #try manual start (was not working with the procfile)
- #echo "try restart the server manually..."
- #$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=8080
- #echo "done!"
-#$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=8080
+  try manual start (was not working with the procfile)
+  echo "try restart the server manually..."
+  $JBOSS_HOME/bin/standalone.sh -Djboss.http.port=$PORT -b 0.0.0.0
+  echo "done!"
 else
   cat << EOF > $BUILD_DIR/Procfile
 web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
