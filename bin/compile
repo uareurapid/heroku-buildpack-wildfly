@@ -103,7 +103,7 @@ if [ -f $BUILD_DIR/Procfile ]; then
 else
   echo "Missing Procfile, creating new configuration..."
   cat << EOF > $BUILD_DIR/Procfile
-web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:\$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
 EOF
 fi
 
