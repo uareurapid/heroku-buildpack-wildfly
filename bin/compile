@@ -97,9 +97,9 @@ echo "-----> Creating configuration (or executing Procfile if exists)..."
 if [ -f $BUILD_DIR/Procfile ]; then
   echo "- Using existing process types"
   #try manual start (was not working with the procfile)
-  #echo "try restart the server manually on port $PORT..."
-  #$JBOSS_HOME/bin/standalone.sh -Djboss.http.port=8080 -b 0.0.0.0
-  #echo "done!"
+  echo "try restart the server manually on port $PORT..."
+  $JBOSS_HOME/bin/standalone.sh -Djboss.http.port=8080 -b 0.0.0.0
+  echo "done!"
 else
   echo "Missing Procfile, creating new configuration..."
   cat << EOF > $BUILD_DIR/Procfile
