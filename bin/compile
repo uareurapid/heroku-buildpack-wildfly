@@ -95,7 +95,8 @@ JBOSS_LOG_MANAGER_LIB="$(echo $JBOSS_HOME/modules/system/layers/base/org/jboss/l
 #JBOSS_LOG_MANAGER_LIB="$(echo $JBOSS_HOME/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar)"
 # -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
 
-echo "-----> Creating configuration (or executing Procfile if exists)..."
+JAVA_OPTS+=" -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+
 if [ -f $BUILD_DIR/Procfile ]; then
   echo "- Using existing process types"
   #try manual start (was not working with the procfile)
@@ -104,13 +105,16 @@ if [ -f $BUILD_DIR/Procfile ]; then
   #echo "done!"
 else
   echo "Missing Procfile, creating new configuration..."
+  # register jboss logmanager at jvm early startup
   cat << EOF > $BUILD_DIR/Procfile
-   #JAVA_OPTS+=" -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager" # register jboss logmanager at jvm early startup
-    web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
-    #-Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
-  #web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
+  web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT 
 EOF
 fi  
+#-Xbootclasspath/p:$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+    #-Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+  #web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
+
+
   #-Xbootclasspath/a:\$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
   #web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:$JBOSS_HOME/modules/org/jboss/logmanager/main/jboss-logmanager-*.jar -Xbootclasspath/p:$JBOSS_HOME/modules/org/apache/log4j/main/log4j*.jar
 #web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT -Xbootclasspath/p:\$JBOSS_LOG_MANAGER_LIB -Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager -Djava.util.logging.manager=org.jboss.logmanager.LogManager
